@@ -1,0 +1,76 @@
+<tool id="LinearRegression1" name="Réaliser une régression linéaire" version="1.0.1">
+  <description> </description>
+  <requirements>
+    <requirement type="package" version="2.11.0">R</requirement>
+    <requirement type="package" version="1.7.1">numpy</requirement>
+    <requirement type="package" version="1.0.3">rpy</requirement>
+  </requirements>
+  <command interpreter="python">
+    linear_regression.py 
+      $input1
+      $response_col
+      $predictor_cols
+      $out_file1
+      $out_file2
+      1>/dev/null
+  </command>
+  <inputs>
+    <param format="tabular" name="input1" type="data" label="Sélectionner le jeu de données d'entrée" help="Le fichier n'apparaît pas dans la liste ? Voir ASTUCE en bas."/>
+    <param name="response_col" label="Colonne de réponse (Y)" type="data_column" data_ref="input1" numerical="True"/>
+    <param name="predictor_cols" label="Colonnes des prédicteurs/variables explicatives (X)" type="data_column" data_ref="input1" numerical="True" multiple="true" >
+        <validator type="no_options" message="Merci de sélectionner au moins une colonne."/>
+    </param>
+  </inputs>
+  <outputs>
+    <data format="input" name="out_file1" metadata_source="input1" />
+    <data format="pdf" name="out_file2" />
+  </outputs>
+  <requirements>
+    <requirement type="python-module">rpy</requirement>
+  </requirements>
+  <tests>
+    <test>
+        <param name="input1" value="regr_inp.tabular"/>
+        <param name="response_col" value="3"/>
+        <param name="predictor_cols" value="1,2"/>
+        <output name="out_file1" file="regr_out.tabular"/>
+        <output name="out_file2" file="regr_out.pdf"/>
+    </test>
+  </tests>
+  <help>
+
+
+.. class:: infomark
+
+**ASTUCE:** Si vos données ne sont pas au format tabulé, utilisez l'outil *Manipulation de texte-&gt;Convertir*
+
+-----
+
+.. class:: infomark
+
+**Ce que fait l'outil**
+
+Cet outil utilise la fonction 'lm' de R pour réaliser une régression linéaire sur des données d'entrée. La sortie correspond à 2 fichiers, l'un contenant les statistiques descriptives de la régression réalisée, et l'autre un graphique diagnostic permettant de vérifier si les hypothèses du modèle sont satisfaites.   
+
+*R Development Core Team (2009). R: A language and environment for statistical computing. R Foundation for Statistical Computing, Vienna, Austria. ISBN 3-900051-07-0, URL http://www.R-project.org.*
+
+-----
+
+.. class:: warningmark
+
+**Note**
+
+- Cet outil traite pour le moment toutes les variables explicatives et réponse comme des variables numériques continues. Exécuter l'outil sur des variables catégorielles produira des résultats incorrects.
+
+- Les lignes contenant de la donnée non-numérique (ou manquante) dans une des colonnes sélectionnées ne seront pas considérées pour les analyses.
+	  
+- Les statistiques descriptives de la sortie sont décrites ci-dessous :
+
+  - sigma: la racine carré de la variance estimée de l'erreur aléatoire (erreur standard des résidus)
+  - R-squared: la part de variance expliquée par le modèle
+  - Adjusted R-squared: la statistique R-squared ci-dessus ajustée, en prenant en compte une pénalisation pour le nombre de prédicteurs (p) (variable explicative)
+  - p-value: p-value pour le test t de l'hypohtèse nulle correspondant à une pente égale à zéro contre l'alternative bilatérale.
+
+
+  </help>
+</tool>
