@@ -45,9 +45,9 @@ analyseGroupe <- function(variationsAnnuellesEspece=NA, tendanceGlobalEspece=NA,
     nameFile <- paste(variationsAnnuellesEspece,sep="" )
     nameFileTrend <- paste(tendanceGlobalEspece,sep="" )
     ## donnees variations d'abondance annuels
-	donnees <-  read.csv2(nameFile, sep = "\t")
+	donnees <-  read.csv(nameFile, sep = "\t")
 	## donnees tendences globales
-    donneesTrend <- read.csv2(nameFileTrend, sep = "\t")
+    donneesTrend <- read.csv(nameFileTrend, sep = "\t")
     donneesTrend <- subset(donneesTrend, select = c(code_espece,valide,mediane_occurrence))
 	## table de reference espece
     tabsp <- read.csv2(paste(args[3],"espece.csv",sep="/"))
